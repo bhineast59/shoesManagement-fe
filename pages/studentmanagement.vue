@@ -1,30 +1,45 @@
 <template>  
-  <div class="container">
-      <div class = "search">
-        <a-input-search placeholder="Search student" style="width: 200px; text-align: left"   />     
-        <button class="btn"> <a-icon class="icoin-add" type="plus-square" /></button> 
+  <div class="container">    
+      <div class = "search">       
+        <h1 style="text-align:left;font-size:20px;font-weight:bold">QUẢN LÝ HỌC VIÊN </h1> 
+        <div style="display: flex;justify-content: flex-end;">
+            <a-input-search placeholder="Tìm kiếm học viên" style="width: 200px; text-align: left"   />     
+            <a class="btn-add" href=""><a-icon class="icoin-add" type="plus-square" style="font-size:30px; margin-left: 8px" /></a>
+        </div>              
       </div>
       <div>
         <a-tabs default-active-key="1">
-            <a-tab-pane key="1" tab="Tuition Debt">
-                
+            <a-tab-pane key="1" tab="Nợ phí">                
             </a-tab-pane>
-            <a-tab-pane key="2" tab="Paid Tuition">
-            </a-tab-pane>  
-            <a-tab-pane key="3" tab="Tab 3" disabled>
-                Tab 3
-            </a-tab-pane>        
+            <a-tab-pane key="2" tab="Đóng phí">
+            </a-tab-pane>         
         </a-tabs>
       </div>
-      <div>
-          <a-table :columns="columns" :data-source="data" :row-key='data => data.id'>  
-        <span slot="action" slot-scope="text, record">
-            <a>Profile - {{ record.name }}</a>
-            <a-divider type="vertical" />
-            <button type="primary"> <a-icon type="delete" /></button> 
-        </span>    
-    </a-table> 
-      </div>
+    <div>
+        <a-table :columns="columns" :data-source="data" :row-key='data => data.id' bordered>
+            <div slot="paidtuition" slot-scope="text" style="justify-content: center; display: flex; flex-wrap: wrap; align-items: center">
+                <span>
+                    {{ text }}
+                </span>
+                <a-divider type="vertical" />             
+                <a href=""><a-icon type="eye" style="font-size: 20px" /></a>
+            </div>
+            <span slot="title">
+            </span>
+            <span slot="profile">
+                <div style="text-align: center">
+                    <a href=""><a-icon type="eye" style="font-size: 20px" /></a>
+                </div>
+            </span>                
+            <span slot="action" >
+                <div style="justify-content: center; display: flex; flex-wrap: wrap; align-items: center">
+                    <a href=""><a-icon type="eye" style="font-size: 20px" /></a>
+                    <a-divider type="vertical" />
+                    <button type="primary"> <a-icon type="delete" /></button> 
+                </div>
+            </span>    
+        </a-table> 
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -35,24 +50,21 @@ Vue.use(Button);
 @Component({
   layout: 'menu',
   name: 'studentmanagement',
-  async fetch(){
-      this.data = await this.$axios.$get('/list-all-student')
-  }, 
 })
 export default class StudentManagement extends Vue {
     private columns: Array<any> = [
     {
-        title: 'Student ID',
+        title: 'Mã sinh viên',
         dataIndex: 'id',
         key: 'id',
     },
     {
-        title: 'Full name',
+        title: 'Họ và tên',
         dataIndex: 'name',
         key: 'name',   
     },
     {
-        title: 'Phone Number',
+        title: 'Số điện thoại',
         dataIndex: 'phone',
         key: 'phone',   
     },
@@ -62,43 +74,45 @@ export default class StudentManagement extends Vue {
         key: 'facebook',   
     },
     {
-        title: 'Address',
+        title: 'Địa chỉ hiện tại',
         dataIndex: 'address',
         key: 'address',   
     },
     {
-        title: 'Paid Tuition',
-        dataIndex: 'paidtuition',
+        title: 'Đã đóng',
+        dataIndex: 'price',
+        slots: { title: 'title' },
+        scopedSlots: { customRender: 'paidtuition' },
         key: 'paidtuition',   
     },
     {
-        title: 'Total Tuition',
-        dataIndex: 'totaltuition',
+        title: 'Tổng phí',
+        dataIndex: 'price',
         key: 'totaltuition',   
     },
     {
-        title: 'Profile',
-        dataIndex: 'profile',
+        title: 'Hồ sơ',
+        scopedSlots: { customRender: 'profile' },
         key: 'profile',   
     },
     {
-        title: 'Action',
+        title: 'Hành động',
         scopedSlots: { customRender: 'action' },
         key: 'action',   
     }
     ];
     private data: Array<any> = [
     ];
+    async created(){
+      this.data = await this.$axios.$get('/Student/get-student')    
+    } 
 }
-
-  
-
 </script>
 
 <style scoped>
 .search {
     text-align: right;
-    margin-bottom: 10px;
+    margin-bottom: 10px;      
 }
 .btn {
     border: none;
@@ -108,9 +122,13 @@ export default class StudentManagement extends Vue {
     background-color: white;
 }
 .icoin-add {
-    font-size: 20px;
+    font-size: 25px;
 }
 .btn :hover {
     background-color: rgb(223, 207, 207);
+}
+.btn-add {
+    text-decoration: none;
+    color: gray;
 }
 </style>
