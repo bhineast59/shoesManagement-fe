@@ -9,7 +9,7 @@
     >
       <div class="logo">
         <img class="logo-img" src="https://picsum.photos/100/100?random=1">
-        <span class="logo-text">VJP</span>
+        <span class="logo-text">Shoes</span>
       </div>
       <a-menu
         v-model="selectedKeys"
@@ -81,7 +81,7 @@
         <nuxt />
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        VJP©2021
+        Shoes©2021
       </a-layout-footer>
     </a-layout>
   </a-layout>
